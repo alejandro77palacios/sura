@@ -1,13 +1,17 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../App.css';
+import {Link} from 'react-router-dom';
 
-function BotonInicio() {
-  const navigate = useNavigate();
-
-  return (
-    <button onClick={() => navigate('/')}>Volver a Inicio</button>
-  );
-}
+const BotonInicio = () => {
+    return (
+        <div>
+            <Link to="/">
+                <button>Volver a Inicio</button>
+            </Link>
+            <Link to="/login">
+                <button>Iniciar sesión</button>
+            </Link>
+        </div>
+    );
+};
 
 export default BotonInicio;
