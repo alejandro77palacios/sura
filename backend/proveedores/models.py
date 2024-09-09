@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -66,3 +67,11 @@ def actualizar_total_solicitud(sender, instance, **kwargs):
     solicitud = instance.solicitud
     solicitud.total = sum(item.producto.precio * item.cantidad for item in solicitud.productoensolicitud_set.all())
     solicitud.save(update_fields=['total'])
+
+
+class CustomUser(AbstractUser):
+    ROLES = (
+        ('colocador', 'Colocador'),
+        ('aprobador', 'Aprobador'),
+    )
+    rol = models.CharField(max_length=10, choices=ROLES)
