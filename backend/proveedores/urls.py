@@ -11,4 +11,6 @@ router.register(r'producto-en-solicitud', views.ProductoEnSolicitudViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('register/', views.UserCreate.as_view(), name='register'),
+    path('user/', views.UserDetail.as_view(), name='user-detail'),
 ]
