@@ -115,5 +115,4 @@ En el servidor del backend se puede acceder a Django Admin para gestionar los da
 través de
 la URL /api/, donde se puede interactuar con los objetos de la base de datos.
 
-Finalmente, procuré mantener todo en español, pero existen ciertos patrones comunes de diseño en inglés que son demasiado  
-comunes y preferí mantenerlos en tal idioma. 
+Finalmente, procuré mantener todo en español, pero existen ciertos patrones comunes de diseño en inglés que son demasiado comunes y preferí mantenerlos en tal idioma. 
