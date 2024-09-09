@@ -48,7 +48,7 @@ function ProveedorForm() {
 
     return (
         <div>
-            <h1>Registrar Nuevo Proveedor</h1>
+            <h2>Registrar Nuevo Proveedor</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Nombre:</label>

@@ -61,7 +61,7 @@ function ProductoForm() {
 
     return (
         <div>
-            <h1>Registrar Nuevo Producto</h1>
+            <h2>Registrar Nuevo Producto</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Nombre:</label>

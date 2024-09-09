@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import '../App.css';
 
 function SolicitudCompraDetail() {
-    const { id } = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
     const [solicitud, setSolicitud] = useState(null);
     const [productosEnSolicitud, setProductosEnSolicitud] = useState([]);
@@ -23,10 +23,7 @@ function SolicitudCompraDetail() {
                 const productosFiltrados = response.data.filter(producto => producto.solicitud === parseInt(id));
                 const productosPromises = productosFiltrados.map(productoEnSolicitud =>
                     axios.get(`/api/producto/${productoEnSolicitud.producto}/`)
-                        .then(response => ({
-                            ...productoEnSolicitud,
-                            producto: response.data
-                        }))
+                        .then(res => ({...productoEnSolicitud, producto: res.data}))
                 );
                 return Promise.all(productosPromises);
             })
@@ -39,13 +36,23 @@ function SolicitudCompraDetail() {
     }, [id]);
 
     const toggleAprobada = () => {
-        const updatedSolicitud = { ...solicitud, aprobada: !solicitud.aprobada };
+        const updatedSolicitud = {...solicitud, aprobada: !solicitud.aprobada, productos: []};
         axios.put(`/api/solicitud/${id}/`, updatedSolicitud)
             .then(response => {
                 setSolicitud(response.data);
             })
             .catch(error => {
                 console.error('Hubo un error actualizando el estado de la solicitud', error);
+            });
+    };
+
+    const deleteSolicitud = () => {
+        axios.delete(`/api/solicitud/${id}/`)
+            .then(() => {
+                navigate('/solicitudes');
+            })
+            .catch(error => {
+                console.error('Hubo un error eliminando la solicitud', error);
             });
     };
 
@@ -60,48 +67,35 @@ function SolicitudCompraDetail() {
     return (
         <div>
             <Link to="/solicitudes">
-                <button>Regresar a la lista de Solicitudes</button>
+                Volver a la lista de solicitudes
             </Link>
             <Link to="/registrar-solicitud">
-                <button className="btn btn-primary">Añadir otra solicitud</button>
+                Registrar nueva solicitud
             </Link>
             <h1>Solicitud de compra {solicitud.id}</h1>
             <p>Fecha de creación: {solicitud.fecha}</p>
             <p>Total: {solicitud.total}</p>
             <p>Estado: {solicitud.aprobada ? 'Aprobada' : 'Pendiente'}</p>
             <button onClick={toggleAprobada}>
-                {solicitud.aprobada ? 'Poner en Pendiente' : 'Aprobar'}
+                {solicitud.aprobada ? 'Marcar como pendiente' : 'Aprobar solicitud'}
             </button>
+            <button onClick={deleteSolicitud} className="btn btn-danger">Eliminar Solicitud</button>
             <h2>Productos en la solicitud</h2>
             <button onClick={handleAddProductoEnSolicitud}>Agregar producto a la solicitud</button>
             <table>
                 <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Precio unitario</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
-                        <th>Editar</th>
-                    </tr>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {productosEnSolicitud.map((productoEnSolicitud) => (
-                        <tr key={productoEnSolicitud.id}>
-                            <td>
-                                <Link to={`/producto/${productoEnSolicitud.producto.id}`}>
-                                    {productoEnSolicitud.producto.nombre}
-                                </Link>
-                            </td>
-                            <td>{productoEnSolicitud.producto.precio}</td>
-                            <td>{productoEnSolicitud.cantidad}</td>
-                            <td>{(productoEnSolicitud.producto.precio * productoEnSolicitud.cantidad).toFixed(2)}</td>
-                            <td>
-                                <Link to={`/producto-en-solicitud/${productoEnSolicitud.id}`}>
-                                    Editar
-                                </Link>
-                            </td>
-                        </tr>
-                    ))}
+                {productosEnSolicitud.map(producto => (
+                    <tr key={producto.id}>
+                        <td>{producto.producto.nombre}</td>
+                        <td>{producto.cantidad}</td>
+                    </tr>
+                ))}
                 </tbody>
             </table>
         </div>
