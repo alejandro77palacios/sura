@@ -1,6 +1,13 @@
 **/.idea/
+**/.DS_Store
+
+# Backend
 **/.venv/
 **/__pycache__/
 **/*.pyc
 **/*.pyo
 **/db.sqlite3
+
+# Frontend
+**/node_modules/
+**/build/
